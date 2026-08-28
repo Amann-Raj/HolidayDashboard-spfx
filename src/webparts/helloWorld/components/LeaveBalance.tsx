@@ -28,6 +28,9 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
   const [chartHovered, setChartHovered] =
     React.useState(false);
 
+  const [animationProgress, setAnimationProgress] =
+  React.useState(0);
+
   React.useEffect(() => {
 
     const loadBalances = async (): Promise<void> => {
@@ -134,6 +137,48 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
 
   }, [context]);
 
+  React.useEffect(() => {
+
+  let startTime: number | null =
+    null;
+
+  const duration = 1200;
+
+  const animate = (
+    timestamp: number
+  ): void => {
+
+    if (!startTime) {
+      startTime = timestamp;
+    }
+
+    const progress =
+      Math.min(
+        (
+          timestamp -
+          startTime
+        ) / duration,
+        1
+      );
+
+    setAnimationProgress(
+      progress
+    );
+
+    if (progress < 1) {
+      window.requestAnimationFrame(
+        animate
+      );
+    }
+
+  };
+
+  window.requestAnimationFrame(
+    animate
+  );
+
+}, []);
+
   const rows = [
     {
       name: 'Vacation',
@@ -168,30 +213,52 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
     balances.optional;
 
   const vacationPercentage =
-    totalDays > 0
-      ? (balances.vacation / totalDays) * 100
-      : 0;
+  totalDays > 0
+    ? (
+        balances.vacation /
+        totalDays
+      ) *
+      (
+        animationProgress *
+        100
+      )
+    : 0;
 
-  const casualPercentage =
-    totalDays > 0
-      ? (balances.casual / totalDays) * 100
-      : 0;
+const casualPercentage =
+  totalDays > 0
+    ? (
+        balances.casual /
+        totalDays
+      ) *
+      (
+        animationProgress *
+        100
+      )
+    : 0;
 
-  const sickPercentage =
-    totalDays > 0
-      ? (balances.sick / totalDays) * 100
-      : 0;
+const sickPercentage =
+  totalDays > 0
+    ? (
+        balances.sick /
+        totalDays
+      ) *
+      (
+        animationProgress *
+        100
+      )
+    : 0;
 
-  const vacationEnd =
-    vacationPercentage;
+const vacationEnd =
+  vacationPercentage;
 
-  const casualEnd =
-    vacationEnd +
-    casualPercentage;
+const casualEnd =
+  vacationEnd +
+  casualPercentage;
 
-  const sickEnd =
-    casualEnd +
-    sickPercentage;
+const sickEnd =
+  casualEnd +
+  sickPercentage;
+
 
   const donutBackground =
     totalDays === 0

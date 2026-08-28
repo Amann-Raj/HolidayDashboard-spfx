@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.23.2",
+    "sdksVersions": {},
+    "version": "1.21.0",
+    "libraryName": "sprint-project",
+    "libraryId": "4dde0851-a965-4061-b705-f7d6a6eb23c1",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "sprint-project",
+    "solutionShortDescription": "sprint-project description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

@@ -130,7 +130,7 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
                 style={{
                     display: 'flex',
                     gap: '20px',
-                    marginBottom: '25px'
+                    marginBottom: '25fpx'
                 }}
             >
                 <KPISection
@@ -160,15 +160,14 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
 
             <div
                 style={{
-                    display: 'grid',
-                    gridTemplateColumns:
-                        '1fr 2fr',
+                    display: 'flex',
+                    flexDirection: 'column',
                     gap: '20px',
-                    marginTop: '25px'
+                    marginTop: '20px'
                 }}
             >
-                <LeaveBalance 
-                context={context}
+                <LeaveBalance
+                    context={context}
                 />
 
                 <MyLeaves

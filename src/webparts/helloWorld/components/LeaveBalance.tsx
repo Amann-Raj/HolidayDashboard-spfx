@@ -19,6 +19,15 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
       optional: 2
     });
 
+  const [activeItem, setActiveItem] =
+    React.useState('Vacation');
+
+  const [hoveredColor, setHoveredColor] =
+    React.useState('#2563EB');
+
+  const [chartHovered, setChartHovered] =
+    React.useState(false);
+
   React.useEffect(() => {
 
     const loadBalances = async (): Promise<void> => {
@@ -86,10 +95,29 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
         });
 
         setBalances({
-          vacation: 12 - vacationUsed,
-          casual: 5 - casualUsed,
-          sick: 10 - sickUsed,
-          optional: 2 - optionalUsed
+          vacation:
+            Math.max(
+              12 - vacationUsed,
+              0
+            ),
+
+          casual:
+            Math.max(
+              5 - casualUsed,
+              0
+            ),
+
+          sick:
+            Math.max(
+              10 - sickUsed,
+              0
+            ),
+
+          optional:
+            Math.max(
+              2 - optionalUsed,
+              0
+            )
         });
 
       } catch (error) {
@@ -110,95 +138,264 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
     {
       name: 'Vacation',
       days: balances.vacation,
-      bg: '#EEF4FF',
-      text: '#2563EB'
+      color: '#2563EB',
+      bg: '#EEF4FF'
     },
     {
       name: 'Casual Leave',
       days: balances.casual,
-      bg: '#ECFDF5',
-      text: '#059669'
+      color: '#10B981',
+      bg: '#ECFDF5'
     },
     {
       name: 'Sick Leave',
       days: balances.sick,
-      bg: '#FFF7ED',
-      text: '#EA580C'
+      color: '#F97316',
+      bg: '#FFF7ED'
     },
     {
       name: 'Optional Holiday',
       days: balances.optional,
-      bg: '#F5F3FF',
-      text: '#7C3AED'
+      color: '#8B5CF6',
+      bg: '#F5F3FF'
     }
   ];
+
+  const totalDays =
+    balances.vacation +
+    balances.casual +
+    balances.sick +
+    balances.optional;
 
   return (
     <div
       style={{
         backgroundColor: '#ffffff',
-        borderRadius: '16px',
-        padding: '20px',
+        borderRadius: '18px',
+        padding: '24px',
         boxShadow:
-          '0 2px 8px rgba(0,0,0,0.08)'
+          '0 4px 16px rgba(0,0,0,0.08)'
       }}
     >
       <h3
         style={{
           marginTop: 0,
-          marginBottom: '20px',
+          marginBottom: '24px',
+          fontSize: '22px',
           color: '#323130'
         }}
       >
         💼 My Leave Balances
       </h3>
 
-      {
-        rows.map((row) => (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '32px',
+          flexWrap: 'wrap'
+        }}
+      >
 
+        {/* LEFT SIDE */}
+
+        <div
+          style={{
+            textAlign: 'center'
+          }}
+        >
           <div
-            key={row.name}
+            onMouseEnter={() =>
+              setChartHovered(true)
+            }
+            onMouseLeave={() =>
+              setChartHovered(false)
+            }
             style={{
+              width: '150px',
+              height: '150px',
+              borderRadius: '50%',
+
+              background:
+                'conic-gradient(' +
+                '#2563EB 0 42%, ' +
+                '#10B981 42% 59%, ' +
+                '#F97316 59% 93%, ' +
+                '#8B5CF6 93% 100%)',
+
               display: 'flex',
-              justifyContent:
-                'space-between',
+              justifyContent: 'center',
               alignItems: 'center',
-              padding: '14px 0',
-              borderBottom:
-                '1px solid #f3f4f6'
+
+              transition:
+                'all .3s ease',
+
+              transform:
+                chartHovered
+                  ? 'scale(1.08)'
+                  : 'scale(1)',
+
+              boxShadow:
+                chartHovered
+                  ? `0 0 30px ${hoveredColor}55`
+                  : '0 8px 24px rgba(0,0,0,0.12)'
             }}
           >
             <div
               style={{
-                fontSize: '14px',
-                color: '#323130',
-                fontWeight: 500
-              }}
-            >
-              {row.name}
-            </div>
+                width: '105px',
+                height: '105px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
 
-            <span
-              style={{
-                backgroundColor:
-                  row.bg,
-                color: row.text,
-                padding:
-                  '8px 14px',
-                borderRadius: '999px',
-                fontSize: '13px',
-                fontWeight: 600,
-                minWidth: '90px',
-                textAlign: 'center'
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
-              {row.days} Days
-            </span>
+              <div
+                style={{
+                  fontSize: '30px',
+                  fontWeight: 700,
+                  color: '#323130'
+                }}
+              >
+                {totalDays}
+              </div>
+
+              <div
+                style={{
+                  color: '#666',
+                  fontSize: '13px'
+                }}
+              >
+                Days Left
+              </div>
+            </div>
           </div>
 
-        ))
-      }
+          
+        </div>
 
+        {/* RIGHT SIDE */}
+
+        <div
+          style={{
+            width: '320px',
+            maxWidth: '100%'
+          }}
+        >
+          {
+            rows.map((row) => (
+
+              <div
+                key={row.name}
+                onMouseEnter={() => {
+
+                  setActiveItem(
+                    row.name
+                  );
+
+                  setHoveredColor(
+                    row.color
+                  );
+
+                }}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns:
+                    '1fr auto',
+
+                  alignItems: 'center',
+
+                  padding: '12px 14px',
+
+                  marginBottom: '10px',
+
+                  borderRadius: '14px',
+
+                  backgroundColor:
+                    activeItem === row.name
+                      ? row.bg
+                      : '#FAFAFA',
+
+                  transform:
+                    activeItem === row.name
+                      ? 'translateX(6px)'
+                      : 'translateX(0)',
+
+                  boxShadow:
+                    activeItem === row.name
+                      ? '0 6px 14px rgba(0,0,0,0.08)'
+                      : 'none',
+
+                  transition:
+                    'all .25s ease',
+
+                  cursor: 'pointer'
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '50%',
+                      backgroundColor:
+                        row.color
+                    }}
+                  />
+
+                  <span
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 500
+                    }}
+                  >
+                    {row.name}
+                  </span>
+                </div>
+
+                <span
+                  style={{
+                    backgroundColor:
+                      row.bg,
+
+                    color:
+                      row.color,
+
+                    padding:
+                      '8px 14px',
+
+                    borderRadius:
+                      '999px',
+
+                    fontWeight: 600,
+
+                    fontSize: '13px',
+
+                    minWidth: '85px',
+
+                    textAlign: 'center'
+                  }}
+                >
+                  {row.days} Days
+                </span>
+              </div>
+
+            ))
+          }
+        </div>
+
+      </div>
     </div>
   );
 

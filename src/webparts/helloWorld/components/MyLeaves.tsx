@@ -7,11 +7,13 @@ import { ILeaveRequest } from '../models/ILeaveRequest';
 interface IMyLeavesProps {
   context: WebPartContext;
   refreshKey: number;
+  onBookTimeOff: () => void;
 }
 
 const MyLeaves: React.FC<IMyLeavesProps> = ({
   context,
-  refreshKey
+  refreshKey,
+  onBookTimeOff
 }) => {
 
   const [leaves, setLeaves] =
@@ -60,13 +62,38 @@ const MyLeaves: React.FC<IMyLeavesProps> = ({
           '0 2px 8px rgba(0,0,0,0.08)'
       }}
     >
-      <h3
+      <div
         style={{
-          marginTop: 0
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px'
         }}
       >
-        My Leave Requests
-      </h3>
+        <h3
+          style={{
+            margin: 0
+          }}
+        >
+          My Leave Requests
+        </h3>
+
+        <button
+          onClick={onBookTimeOff}
+          style={{
+            backgroundColor: '#2563EB',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '10px 16px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            fontSize: '14px'
+          }}
+        >
+          + Book Time Off
+        </button>
+      </div>
 
       {
         leaves.length === 0 && (

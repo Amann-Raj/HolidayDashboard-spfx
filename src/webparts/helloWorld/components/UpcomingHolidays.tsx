@@ -11,11 +11,45 @@ const UpcomingHolidays: React.FC<IUpcomingHolidaysProps> = ({
   onBookTimeOff
 }) => {
 
-  const upcomingHolidays = holidays
+  const upcomingHolidays = [...holidays]
     .sort(
       (a, b) =>
         new Date(a.HolidayDate).getTime() -
         new Date(b.HolidayDate).getTime()
+    );
+
+  const groupedHolidays =
+    upcomingHolidays.reduce(
+      (
+        groups: {
+          [key: string]: IHoliday[];
+        },
+        holiday
+      ) => {
+
+        const monthYear =
+          new Date(
+            holiday.HolidayDate
+          ).toLocaleDateString(
+            'en-IN',
+            {
+              month: 'long',
+              year: 'numeric'
+            }
+          );
+
+        if (!groups[monthYear]) {
+          groups[monthYear] = [];
+        }
+
+        groups[monthYear].push(
+          holiday
+        );
+
+        return groups;
+
+      },
+      {}
     );
 
   return (
@@ -28,98 +62,150 @@ const UpcomingHolidays: React.FC<IUpcomingHolidaysProps> = ({
           '0 2px 8px rgba(0,0,0,0.08)'
       }}
     >
-      <h2
+      <div
         style={{
-          marginTop: 0,
-          fontWeight: 400
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px'
         }}
       >
-        Upcoming Time Off
-      </h2>
+        <h2
+          style={{
+            margin: 0,
+            fontWeight: 600
+          }}
+        >
+          Upcoming Time Off
+        </h2>
 
-      {
-        upcomingHolidays.map((holiday) => (
-
-          <div
-            key={holiday.Id}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '14px 0',
-              borderBottom:
-                '1px solid #f3f4f6'
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontWeight: 600,
-                  fontSize: '18px'
-                }}
-              >
-                {
-                  new Date(
-                    holiday.HolidayDate
-                  ).toLocaleDateString(
-                    'en-IN',
-                    {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    }
-                  )
-                }
-              </div>
-
-              <div
-                style={{
-                  marginTop: '5px',
-                  color: '#666'
-                }}
-              >
-                {holiday.Title}
-              </div>
-            </div>
-
-            <span
-              style={{
-                backgroundColor: '#2ecc71',
-                color: '#fff',
-                padding: '10px 22px',
-                borderRadius: '30px',
-                fontSize: '14px',
-                minWidth: '110px',
-                textAlign: 'center',
-                display: 'inline-block'
-              }}
-            >
-              Approved
-            </span>
-          </div>
-
-        ))
-      }
+      </div>
 
       <div
         style={{
-          marginTop: '20px'
+          maxHeight: '500px',
+          overflowY: 'auto',
+          paddingRight: '8px'
         }}
       >
-        <button
-          onClick={onBookTimeOff}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#2563eb',
-            fontWeight: 600,
-            fontSize: '15px',
-            cursor: 'pointer',
-            padding: 0
-          }}
-        >
-          Book Time Off +
-        </button>
+        {
+          Object.keys(
+            groupedHolidays
+          ).map((month) => (
+
+            <div
+              key={month}
+            >
+              <div
+                style={{
+                  position: 'sticky',
+                  top: 0,
+                  backgroundColor:
+                    '#ffffff',
+                  zIndex: 1,
+                  fontWeight: 700,
+                  fontSize: '16px',
+                  color: '#2563EB',
+                  padding:
+                    '10px 0',
+                  borderBottom:
+                    '2px solid #EEF2FF'
+                }}
+              >
+                {month}
+              </div>
+
+              {
+                groupedHolidays[
+                  month
+                ].map(
+                  (holiday) => (
+
+                    <div
+                      key={
+                        holiday.Id
+                      }
+                      style={{
+                        display:
+                          'flex',
+                        justifyContent:
+                          'space-between',
+                        alignItems:
+                          'center',
+                        padding:
+                          '14px 0',
+                        borderBottom:
+                          '1px solid #f3f4f6'
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontWeight:
+                              600,
+                            fontSize:
+                              '17px'
+                          }}
+                        >
+                          {
+                            new Date(
+                              holiday.HolidayDate
+                            ).toLocaleDateString(
+                              'en-IN',
+                              {
+                                day: 'numeric',
+                                month: 'long'
+                              }
+                            )
+                          }
+                        </div>
+
+                        <div
+                          style={{
+                            marginTop:
+                              '5px',
+                            color:
+                              '#666'
+                          }}
+                        >
+                          {
+                            holiday.Title
+                          }
+                        </div>
+                      </div>
+
+                      <span
+                        style={{
+                          backgroundColor:
+                            '#2ecc71',
+                          color:
+                            '#fff',
+                          padding:
+                            '10px 22px',
+                          borderRadius:
+                            '30px',
+                          fontSize:
+                            '14px',
+                          minWidth:
+                            '110px',
+                          textAlign:
+                            'center',
+                          display:
+                            'inline-block'
+                        }}
+                      >
+                        Approved
+                      </span>
+                    </div>
+
+                  )
+                )
+              }
+
+            </div>
+
+          ))
+        }
       </div>
 
     </div>

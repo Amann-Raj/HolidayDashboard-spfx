@@ -167,6 +167,42 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
     balances.sick +
     balances.optional;
 
+  const vacationPercentage =
+    totalDays > 0
+      ? (balances.vacation / totalDays) * 100
+      : 0;
+
+  const casualPercentage =
+    totalDays > 0
+      ? (balances.casual / totalDays) * 100
+      : 0;
+
+  const sickPercentage =
+    totalDays > 0
+      ? (balances.sick / totalDays) * 100
+      : 0;
+
+  const vacationEnd =
+    vacationPercentage;
+
+  const casualEnd =
+    vacationEnd +
+    casualPercentage;
+
+  const sickEnd =
+    casualEnd +
+    sickPercentage;
+
+  const donutBackground =
+    totalDays === 0
+      ? '#E5E7EB'
+      : `conic-gradient(
+        #2563EB 0% ${vacationEnd}%,
+        #10B981 ${vacationEnd}% ${casualEnd}%,
+        #F97316 ${casualEnd}% ${sickEnd}%,
+        #8B5CF6 ${sickEnd}% 100%
+      )`;
+
   return (
     <div
       style={{
@@ -198,7 +234,7 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
         }}
       >
 
-        {/* LEFT SIDE */}
+        {/* DONUT */}
 
         <div
           style={{
@@ -218,11 +254,7 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
               borderRadius: '50%',
 
               background:
-                'conic-gradient(' +
-                '#2563EB 0 42%, ' +
-                '#10B981 42% 59%, ' +
-                '#F97316 59% 93%, ' +
-                '#8B5CF6 93% 100%)',
+                donutBackground,
 
               display: 'flex',
               justifyContent: 'center',
@@ -259,24 +291,33 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
                 style={{
                   fontSize: '30px',
                   fontWeight: 700,
-                  color: '#323130'
+                  color:
+                    totalDays === 0
+                      ? '#EF4444'
+                      : '#323130'
                 }}
               >
-                {totalDays}
+                {Math.max(totalDays, 0)}
               </div>
 
               <div
                 style={{
-                  color: '#666',
+                  color:
+                    totalDays === 0
+                      ? '#EF4444'
+                      : '#666',
+
                   fontSize: '13px'
                 }}
               >
-                Days Left
+                {
+                  totalDays === 0
+                    ? 'No Balance'
+                    : 'Days Left'
+                }
               </div>
             </div>
           </div>
-
-          
         </div>
 
         {/* RIGHT SIDE */}
@@ -382,12 +423,16 @@ const LeaveBalance: React.FC<ILeaveBalanceProps> = ({
 
                     fontSize: '13px',
 
-                    minWidth: '85px',
+                    minWidth: '90px',
 
                     textAlign: 'center'
                   }}
                 >
-                  {row.days} Days
+                  {
+                    row.days <= 0
+                      ? 'Exhausted'
+                      : `${row.days} Days`
+                  }
                 </span>
               </div>
 

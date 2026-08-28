@@ -87,7 +87,125 @@ const ApplyLeave: React.FC<IApplyLeaveProps> = ({
 
     }
 
+    const leaveDays =
+      Math.ceil(
+        (
+          new Date(endDate).getTime() -
+          new Date(startDate).getTime()
+        ) /
+        (
+          1000 *
+          60 *
+          60 *
+          24
+        )
+      ) + 1;
+
     try {
+
+      const myLeaves =
+        await LeaveService.getMyLeaves(
+          context
+        );
+
+      let vacationUsed = 0;
+      let casualUsed = 0;
+      let sickUsed = 0;
+      let optionalUsed = 0;
+
+      myLeaves.forEach(
+        (leave: any) => {
+
+          if (
+            leave.field_5 !== 'Approved'
+          ) {
+            return;
+          }
+
+          const start =
+            new Date(
+              leave.field_2
+            );
+
+          const end =
+            new Date(
+              leave.field_3
+            );
+
+          const days =
+            Math.ceil(
+              (
+                end.getTime() -
+                start.getTime()
+              ) /
+              (
+                1000 *
+                60 *
+                60 *
+                24
+              )
+            ) + 1;
+
+          switch (
+          leave.field_4
+          ) {
+
+            case 'Vacation':
+              vacationUsed += days;
+              break;
+
+            case 'Casual Leave':
+              casualUsed += days;
+              break;
+
+            case 'Sick Leave':
+              sickUsed += days;
+              break;
+
+            case 'Optional Holiday':
+              optionalUsed += days;
+              break;
+
+          }
+
+        }
+      );
+
+      const balances = {
+        Vacation:
+          12 -
+          vacationUsed,
+
+        'Casual Leave':
+          5 -
+          casualUsed,
+
+        'Sick Leave':
+          10 -
+          sickUsed,
+
+        'Optional Holiday':
+          2 -
+          optionalUsed
+      };
+
+      const availableBalance =
+        balances[
+        leaveType as keyof typeof balances
+        ];
+
+      if (
+        leaveDays >
+        availableBalance
+      ) {
+
+        setError(
+          `Only ${availableBalance} day(s) remaining for ${leaveType}.`
+        );
+
+        return;
+
+      }
 
       await LeaveService.applyLeave(
         context,
@@ -101,7 +219,6 @@ const ApplyLeave: React.FC<IApplyLeaveProps> = ({
           startDate,
           endDate,
           leaveType,
-
           comments,
 
           department: 'IT'

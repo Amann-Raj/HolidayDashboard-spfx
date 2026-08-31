@@ -104,6 +104,19 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
         'Public Holiday'
     ).length;
 
+    const userName =
+  context.pageContext.user.displayName;
+
+const userInitials =
+  userName
+    .split(' ')
+    .map(
+      (name) => name.charAt(0)
+    )
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
   if (loading) {
 
     return (
@@ -115,11 +128,99 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
   }
 
   return (
+  <div
+    style={{
+      marginTop: '20px'
+    }}
+  >
+
+    {/* DASHBOARD HEADER */}
+
     <div
       style={{
-        marginTop: '20px'
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '24px'
       }}
     >
+      <div>
+        <h2
+          style={{
+            margin: 0,
+            color: '#323130',
+            fontWeight: 700
+          }}
+        >
+          Holiday & Leave Dashboard
+        </h2>
+
+        <div
+          style={{
+            color: '#666',
+            marginTop: '4px'
+          }}
+        >
+          Welcome back, {userName} 👋
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          backgroundColor: '#FFFFFF',
+          padding: '10px 16px',
+          borderRadius: '999px',
+          border: '1px solid #E5E7EB',
+          boxShadow:
+            '0 8px 20px rgba(37,99,235,0.12)'
+        }}
+      >
+        <div
+          title={userName}
+          style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            backgroundColor: '#F8FAFF',
+            border: '2px solid #2563EB',
+            color: '#2563EB',
+
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+
+            fontWeight: 700,
+            fontSize: '16px'
+          }}
+        >
+          {userInitials}
+        </div>
+
+        <div>
+          <div
+            style={{
+              fontWeight: 600,
+              color: '#323130'
+            }}
+          >
+            {userName}
+          </div>
+
+          <div
+            style={{
+              fontSize: '12px',
+              color: '#666'
+            }}
+          >
+            Employee
+          </div>
+        </div>
+      </div>
+
+    </div>
 
       {/* KPI CARDS */}
 
@@ -191,7 +292,7 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
         />
       </div>
 
-      {/* HOLIDAY VIEW */}
+            {/* HOLIDAY VIEW */}
 
       <div
         style={{
@@ -228,7 +329,9 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
         context={context}
         isOpen={showLeaveModal}
         onClose={() =>
-          setShowLeaveModal(false)
+          setShowLeaveModal(
+            false
+          )
         }
         onLeaveApplied={() =>
           setRefreshLeaves(

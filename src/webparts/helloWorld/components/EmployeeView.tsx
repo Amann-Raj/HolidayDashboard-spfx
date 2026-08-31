@@ -104,18 +104,18 @@ const EmployeeView: React.FC<IEmployeeViewProps> = ({
         'Public Holiday'
     ).length;
 
-    const userName =
-  context.pageContext.user.displayName;
+  const userName =
+    context.pageContext.user.displayName;
 
-const userInitials =
-  userName
-    .split(' ')
-    .map(
-      (name) => name.charAt(0)
-    )
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+  const userInitials =
+    userName
+      .split(' ')
+      .map(
+        (name) => name.charAt(0)
+      )
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
 
   if (loading) {
 
@@ -128,221 +128,221 @@ const userInitials =
   }
 
   return (
-  <div
-    style={{
-      marginTop: '20px'
-    }}
-  >
-
-    {/* DASHBOARD HEADER */}
-
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '24px'
+        marginTop: '20px'
       }}
     >
-      <div>
-        <h2
-          style={{
-            margin: 0,
-            color: '#323130',
-            fontWeight: 700
-          }}
-        >
-          Holiday & Leave Dashboard
-        </h2>
+
+      {/* DASHBOARD HEADER */}
 
         <div
           style={{
-            color: '#666',
-            marginTop: '4px'
-          }}
-        >
-          Welcome back, {userName} 👋
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          backgroundColor: '#FFFFFF',
-          padding: '10px 16px',
-          borderRadius: '999px',
-          border: '1px solid #E5E7EB',
-          boxShadow:
-            '0 8px 20px rgba(37,99,235,0.12)'
-        }}
-      >
-        <div
-          title={userName}
-          style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '50%',
-            backgroundColor: '#F8FAFF',
-            border: '2px solid #2563EB',
-            color: '#2563EB',
-
             display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            justifyContent: 'center',
-
-            fontWeight: 700,
-            fontSize: '16px'
+            marginBottom: '24px'
           }}
         >
-          {userInitials}
-        </div>
+          <div>
+            <h2
+              style={{
+                margin: 0,
+                color: '#323130',
+                fontWeight: 700
+              }}
+            >
+              Holiday & Leave Dashboard
+            </h2>
 
-        <div>
-          <div
-            style={{
-              fontWeight: 600,
-              color: '#323130'
-            }}
-          >
-            {userName}
+            <div
+              style={{
+                color: '#666',
+                marginTop: '4px'
+              }}
+            >
+              Welcome back, {userName} 👋
+            </div>
           </div>
 
           <div
             style={{
-              fontSize: '12px',
-              color: '#666'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              backgroundColor: '#FFFFFF',
+              padding: '10px 16px',
+              borderRadius: '999px',
+              border: '1px solid #E5E7EB',
+              boxShadow:
+                '0 8px 20px rgba(37,99,235,0.12)'
             }}
           >
-            Employee
+            <div
+              title={userName}
+              style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                backgroundColor: '#F8FAFF',
+                border: '2px solid #2563EB',
+                color: '#2563EB',
+
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+
+                fontWeight: 700,
+                fontSize: '16px'
+              }}
+            >
+              {userInitials}
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontWeight: 600,
+                  color: '#323130'
+                }}
+              >
+                {userName}
+              </div>
+
+              <div
+                style={{
+                  fontSize: '12px',
+                  color: '#666'
+                }}
+              >
+                Employee
+              </div>
+            </div>
           </div>
+
         </div>
-      </div>
 
-    </div>
+        {/* KPI CARDS */}
 
-      {/* KPI CARDS */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '20px',
+            marginBottom: '30px'
+          }}
+        >
+          <KPISection
+            title="Total Holidays"
+            value={holidays.length}
+          />
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          marginBottom: '30px'
-        }}
-      >
-        <KPISection
-          title="Total Holidays"
-          value={holidays.length}
-        />
+          <KPISection
+            title="Public Holidays"
+            value={publicHolidays}
+          />
 
-        <KPISection
-          title="Public Holidays"
-          value={publicHolidays}
-        />
+          <KPISection
+            title="Upcoming Holidays"
+            value={upcomingHolidaysCount}
+          />
+        </div>
 
-        <KPISection
-          title="Upcoming Holidays"
-          value={upcomingHolidaysCount}
-        />
-      </div>
+        {/* MY LEAVE REQUESTS */}
 
-      {/* MY LEAVE REQUESTS */}
-
-      <MyLeaves
-        context={context}
-        refreshKey={refreshLeaves}
-        onBookTimeOff={() =>
-          setShowLeaveModal(true)
-        }
-      />
-
-      {/* MY LEAVE BALANCES */}
-
-      <div
-        style={{
-          marginTop: '20px'
-        }}
-      >
-        <LeaveBalance
+        <MyLeaves
           context={context}
-        />
-      </div>
-
-      {/* FILTERS + VIEW TOGGLE */}
-
-      <div
-        style={{
-          marginTop: '20px'
-        }}
-      >
-        <Filters
-          selectedCategory={
-            selectedCategory
-          }
-          selectedView={
-            selectedView
-          }
-          onCategoryChange={
-            setSelectedCategory
-          }
-          onViewChange={
-            setSelectedView
+          refreshKey={refreshLeaves}
+          onBookTimeOff={() =>
+            setShowLeaveModal(true)
           }
         />
-      </div>
 
-            {/* HOLIDAY VIEW */}
+        {/* MY LEAVE BALANCES */}
 
-      <div
-        style={{
-          marginTop: '20px'
-        }}
-      >
-        {
-          selectedView === 'Card'
-            ? (
-              <UpcomingHolidays
-                holidays={
-                  filteredHolidays
-                }
-                onBookTimeOff={() =>
-                  setShowLeaveModal(
-                    true
-                  )
-                }
-              />
+        <div
+          style={{
+            marginTop: '20px'
+          }}
+        >
+          <LeaveBalance
+            context={context}
+          />
+        </div>
+
+        {/* FILTERS + VIEW TOGGLE */}
+
+        <div
+          style={{
+            marginTop: '20px'
+          }}
+        >
+          <Filters
+            selectedCategory={
+              selectedCategory
+            }
+            selectedView={
+              selectedView
+            }
+            onCategoryChange={
+              setSelectedCategory
+            }
+            onViewChange={
+              setSelectedView
+            }
+          />
+        </div>
+
+        {/* HOLIDAY VIEW */}
+
+        <div
+          style={{
+            marginTop: '20px'
+          }}
+        >
+          {
+            selectedView === 'Card'
+              ? (
+                <UpcomingHolidays
+                  holidays={
+                    filteredHolidays
+                  }
+                  onBookTimeOff={() =>
+                    setShowLeaveModal(
+                      true
+                    )
+                  }
+                />
+              )
+              : (
+                <CalendarView
+                  holidays={
+                    filteredHolidays
+                  }
+                />
+              )
+          }
+        </div>
+
+        {/* APPLY LEAVE MODAL */}
+
+        <ApplyLeave
+          context={context}
+          isOpen={showLeaveModal}
+          onClose={() =>
+            setShowLeaveModal(
+              false
             )
-            : (
-              <CalendarView
-                holidays={
-                  filteredHolidays
-                }
-              />
+          }
+          onLeaveApplied={() =>
+            setRefreshLeaves(
+              prev => prev + 1
             )
-        }
+          }
+        />
+
       </div>
-
-      {/* APPLY LEAVE MODAL */}
-
-      <ApplyLeave
-        context={context}
-        isOpen={showLeaveModal}
-        onClose={() =>
-          setShowLeaveModal(
-            false
-          )
-        }
-        onLeaveApplied={() =>
-          setRefreshLeaves(
-            prev => prev + 1
-          )
-        }
-      />
-
-    </div>
-  );
+      );
 
 };
 
-export default EmployeeView;
+      export default EmployeeView;

@@ -15,6 +15,24 @@ const HelloWorld: React.FC<IHelloWorldProps> = ({
 
   return (
     <>
+      <div
+        style={{
+          textAlign: 'center',
+          marginBottom: '16px'
+        }}
+      >
+        <img
+          src={`${context.pageContext.web.absoluteUrl}/SiteAssets/capgemini-logo.svg`}
+          alt="Capgemini Logo"
+          style={{
+            maxWidth: '260px',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto'
+          }}
+        />
+      </div>
+
       <Header />
 
       <div

@@ -59,7 +59,8 @@ export default class LeaveService {
         field_3: leaveData.endDate,
         field_4: leaveData.leaveType,
         field_5: 'Pending',
-        field_6: leaveData.department
+        field_6: leaveData.department,
+        Comments: leaveData.comments
       });
 
   }
